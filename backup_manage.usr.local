@@ -45,7 +45,7 @@ echo "Doing $btype backup, saving output to $output"
 
 timestamp="$(date +'%m%d%I%M')"
 
-if [ "$bytpe" = "incremental" ] ; then
+if [ "$btype" = "incremental" ] ; then
   if [ ! -f $tsfile ] ; then
     echo "Error: cant do an incremtnal backup: no timestamp file" >&2
     exit 1
