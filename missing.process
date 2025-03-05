@@ -1,0 +1,39 @@
+#!/usr/bin/ksh
+# script to send email notification when a process dies
+# & attempt to restart it if requested
+# $1 = username
+# $2 = process name
+# $3 = comma seperated(no spaces) email addresses
+# $4 = optional script to run if process dies
+# jd henderson 8-1-07
+
+
+if [[ ($1 == "") || ($2 == "") || ($3 == "")  ]] then
+    echo "Usage: missing.process USERNAME PROCESS-NAME EMAIL-ADDRESS(S)(comma seperated, no spaces) OPTIONAL-SCRIPT-TO-RUN-IF-PROCESS-DIES"
+    exit
+fi
+
+ps -ef | grep $1 | grep -v grep | grep -v missing.process | grep $2 > /tmp/$1$2.tmp
+
+if [[ `grep $2 /tmp/$1$2.tmp` == "" ]] then
+    if [[ ! -a /tmp/.missing-process-flag-$1$2 ]] then
+        echo $2" process is missing for user "$1 > /tmp/$1$2.tmp2
+        touch /tmp/.missing-process-flag-$1$2
+        if [[ $4 != "" ]] then
+            echo "one attempt will be made to restart the process." >> /tmp/$1$2.tmp2
+            echo $4 > /tmp/$1$2.tmp3
+            chmod 700 /tmp/$1$2.tmp3
+            /tmp/$1$2.tmp3
+        fi
+        /usr/bin/mail -s "!!! Missing Process !!!" $3 < /tmp/$1$2.tmp2
+    fi
+else
+    if [[ -a /tmp/.missing-process-flag-$1$2 ]] then
+        echo $2" process is restored for user "$1 > /tmp/$1$2.tmp2
+        /usr/bin/mail -s "!!! Restored Process !!!" $3 < /tmp/$1$2.tmp2
+        rm /tmp/.missing-process-flag-$1$2
+        exit
+    fi
+fi
+
+rm /tmp/$1$2.tmp*

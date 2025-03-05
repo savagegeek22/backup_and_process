@@ -1,0 +1,4 @@
+#!/bin/bash
+mkdir /var/lock/subsys
+touch /var/lock/subsys/netvault
+/etc/init.d/netvault restart

@@ -1,0 +1,6 @@
+# CREATE ISO from TGZ files from athina
+   mkisofs -R -J -l -o /backupraid/SERVERS/athina/athina-backup-`/bin/date +%Y%m%d`.iso /backupraid/SERVERS/athina/*.tgz
+# After ISO has been created, remove the TGZ files
+#    rm -f /backupraid/SERVERS/athina/*.tgz
+# Mail out complete when complete
+ls -al /backupraid/SERVERS/athina/athina-backup-`/bin/date +%Y%m%d`.iso | mail -s "FULL Backup of $HOSTNAME has completed" root
