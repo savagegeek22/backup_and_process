@@ -1,4 +1,5 @@
 # backup_and_process
+# Most of these files do the below for backups
 
 Backup and process watch scripts which were designed for IneoUSA
 before Centreon/Nagios was implemented for them 
